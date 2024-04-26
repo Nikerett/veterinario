@@ -5,7 +5,7 @@
         host: "172.26.48.1",
         user: "tps",
         password: "ttppss",
-        database: "td"
+        database: "veterinario"
     }, { debug: true });
     
     connpool.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
