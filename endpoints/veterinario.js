@@ -70,7 +70,7 @@ function endpoint(app, connpool) {
     });
 
 
-    app.put("/api/tasks/:id", (req, res) => {
+    app.put("/api/veterinario/:id", (req, res) => {
         var data = {
             description: req.body.description,
             status: req.body.status,
