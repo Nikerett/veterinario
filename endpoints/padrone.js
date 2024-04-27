@@ -19,7 +19,7 @@ function endpoint(app, connpool) {
             status: req.body.status,
         }
 
-        var sql = 'INSERT INTO task (description, status) VALUES (?,?)'
+        var sql = 'INSERT INTO padrone (idpadrone, nome, cognome, dataN) VALUES (1, nikita, kelba, 2004-08-31)'
         var params = [data.description, data.status]
         connpool.query(sql, params, (error, results) => {
             if (error) {
@@ -39,7 +39,7 @@ function endpoint(app, connpool) {
 
 
     app.get("/api/tasks", (req, res, next) => {
-        var sql = "select * from task"
+        var sql = "select * from padrone"
         var params = []
         connpool.query(sql, params, (err, rows) => {
             if (err) {
