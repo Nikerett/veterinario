@@ -20,7 +20,7 @@ function endpoint(app, connpool) {
         }
 
         var sql = 'INSERT INTO padrone (idpadrone, nome, cognome, dataN) VALUES (1, nikita, kelba, 2004-08-31)'
-        var params = [data.description, data.status]
+        var params = [data.nome, data.cognome, data.dataN]
         connpool.query(sql, params, (error, results) => {
             if (error) {
                 res.status(400).json({ "error": error.message })
@@ -43,71 +43,73 @@ function endpoint(app, connpool) {
         var params = []
         connpool.query(sql, params, (err, rows) => {
             if (err) {
-              res.status(400).json({"error":err.message});
-              return;
+                res.status(400).json({ "error": err.message });
+                return;
             }
             res.json({
-                "message":"success",
-                "data":rows
+                "message": "success",
+                "data": rows
             })
-          });
+        });
     });
 
 
     app.get("/api/tasks/:id", (req, res) => {
-        var sql = "select * from task where task_id = ?"
+        var sql = "select * from padrone where idpadrone = ?"
         var params = [req.params.id]
         connpool.query(sql, params, (err, rows) => {
             if (err) {
-              res.status(400).json({"error":err.message});
-              return;
+                res.status(400).json({ "error": err.message });
+                return;
             }
             res.json({
-                "message":"success",
-                "data":rows[0]
+                "message": "success",
+                "data": rows[0]
             })
-          });
+        });
     });
 
 
-    app.put("/api/tasks/:id", (req, res) => {
+    app.put("/api/padrone/:id", (req, res) => {
         var data = {
-            description: req.body.description,
-            status: req.body.status,
+            nome: req.body.nome,
+            cognome: req.body.cognome,
+            dataN: req.body.dataN,
         }
         connpool.execute(
-            `UPDATE task set 
-               description = COALESCE(?,description), 
-               status = COALESCE(?,status) 
-               WHERE task_id = ?`,
-            [data.description, data.status, req.params.id],
+            `UPDATE padrone set 
+               nome = COALESCE(?,nome), 
+               cognome = COALESCE(?,cognome) 
+               dataN = COALESCE(?, dataN)
+               WHERE idpadrone = ?`,
+            [data.nome, data.cognome, data.dataN, req.params.id],
             function (err, result) {
-                if (err){
-                    res.status(400).json({"error": err.message})
+                if (err) {
+                    res.status(400).json({ "error": err.message })
                     return;
                 }
-                console.log(result )
+                console.log(result)
                 res.json({
                     message: "success",
                     data: data,
                     changes: result.affectedRows
                 })
-        });
+            });
     })
 
 
 
-    app.delete("/api/tasks/:id", (req, res) => {
+    app.delete("/api/padrone/:id", (req, res) => {
         connpool.execute(
-            'DELETE FROM task WHERE task_id = ?',
+            'DELETE FROM padrone WHERE idpadrone = ?',
             [req.params.id],
             function (err, result) {
-                if (err){
-                    res.status(400).json({"error": err.message})
+                if (err) {
+                    res.status(400).json({ "error": err.message })
                     return;
                 }
-                res.json({"message":"deleted", changes: result.affectedRows})
-        });
+                res.json({ "message": "deleted", changes: result.affectedRows })
+            });
     })
 
 
