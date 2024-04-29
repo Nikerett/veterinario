@@ -1,6 +1,6 @@
 function endpoint(app, connpool) {
 
-    app.post("/api/tasks", (req, res) => {
+    app.post("/api/veterinario", (req, res) => {
         var errors = []
         /* controllo dati inseriti
         if (!req.body.description) {
@@ -77,10 +77,11 @@ function endpoint(app, connpool) {
         }
         connpool.execute(
             `UPDATE veterinario set 
-               description = COALESCE(?,description), 
-               status = COALESCE(?,status) 
+               nome = COALESCE(?,nome), 
+               cognome = COALESCE(?,cognome)
+               dataN = COALESCE(?,dataN) 
                WHERE id_vet =1`,
-            [data.description, data.status, req.params.id],
+            [data.nome, data.cognome, data.dataN, req.params.id],
             function (err, result) {
                 if (err) {
                     res.status(400).json({ "error": err.message })
@@ -97,7 +98,7 @@ function endpoint(app, connpool) {
 
 
 
-    app.delete("/api/tasks/:id", (req, res) => {
+    app.delete("/api/veterinario/:id", (req, res) => {
         connpool.execute(
             'DELETE FROM veterinario WHERE id_vet =1',
             [req.params.id],
