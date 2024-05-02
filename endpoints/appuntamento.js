@@ -1,13 +1,16 @@
 function endpoint(app, connpool) {
 
-    app.post("/api/tasks", (req, res) => {
+    app.post("/api/appuntamenti", (req, res) => {
         var errors = []
         /* controllo dati inseriti
-        if (!req.body.description) {
-            errors.push("No description specified");
+        if (!req.body.dataOra) {
+            errors.push("No dataOra specified");
         }
-        if (req.body.status === "") {
-            errors.push("No status specified");
+        if (!req.body.idAnimale) {
+            errors.push("No idAnimale specified");
+        }
+        if (!req.body.idVeterinario) {
+            errors.push("No idVeterinario specified");
         }
         */
         if (errors.length) {
@@ -15,12 +18,13 @@ function endpoint(app, connpool) {
             return;
         }
         var data = {
-            description: req.body.description,
-            status: req.body.status,
+            dataOra: req.body.dataOra,
+            idAnimale: req.body.idAnimale,
+            idVeterinario: req.body.idVeterinario,
         }
 
-        var sql = 'INSERT INTO task (description, status) VALUES (?,?)'
-        var params = [data.description, data.status]
+        var sql = 'INSERT INTO appuntamenti (dataOra, idAnimale, idVeterinario) VALUES (?,?,?)'
+        var params = [data.dataOra, data.idAnimale, data.idVeterinario]
         connpool.query(sql, params, (error, results) => {
             if (error) {
                 res.status(400).json({ "error": error.message })
@@ -29,7 +33,7 @@ function endpoint(app, connpool) {
             res.json({
                 "message": "success",
                 "data": data,
-                "id": this.insertID
+                "idAppuntamento": result.insertID
             })
             console.log(results)
         });
@@ -97,9 +101,9 @@ function endpoint(app, connpool) {
 
 
 
-    app.delete("/api/tasks/:id", (req, res) => {
+    app.delete("/api/appuntamento/:id", (req, res) => {
         connpool.execute(
-            'DELETE FROM task WHERE task_id = ?',
+            'DELETE FROM appuntamento WHERE idAppuntamento = ?',
             [req.params.id],
             function (err, result) {
                 if (err){
