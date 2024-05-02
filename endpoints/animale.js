@@ -19,7 +19,7 @@ function endpoint(app, connpool) {
             status: req.body.status,
         }
 
-        var sql = 'INSERT INTO task (description, status) VALUES (?,?)'
+        var sql = 'INSERT INTO `veterinario`.`animale` (`idAnimale`, `nome`, `DataN`, `idrazza`, `idpadrone`) VALUES ("1", "miska", "2000-12-14", "1", "1");'
         var params = [data.description, data.status]
         connpool.query(sql, params, (error, results) => {
             if (error) {
@@ -55,7 +55,7 @@ function endpoint(app, connpool) {
 
 
     app.get("/api/tasks/:id", (req, res) => {
-        var sql = "select * from task where task_id = ?"
+        var sql = "SELECT * FROM veterinario.animale WHERE idanimale=1;"
         var params = [req.params.id]
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -76,10 +76,7 @@ function endpoint(app, connpool) {
             status: req.body.status,
         }
         connpool.execute(
-            `UPDATE task set 
-               description = COALESCE(?,description), 
-               status = COALESCE(?,status) 
-               WHERE task_id = ?`,
+            `DELETE FROM veterinario.animale WHERE idanimale =1`,
             [data.description, data.status, req.params.id],
             function (err, result) {
                 if (err){
