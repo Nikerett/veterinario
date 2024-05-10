@@ -42,8 +42,8 @@ function endpoint(app, connpool) {
 
 
 
-    app.get("/api/tasks", (req, res, next) => {
-        var sql = "select * from task"
+    app.get("/api/appuntamenti", (req, res, next) => {
+        var sql = "select * from appuntamenti"
         var params = []
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -58,8 +58,8 @@ function endpoint(app, connpool) {
     });
 
 
-    app.get("/api/tasks/:id", (req, res) => {
-        var sql = "select * from task where task_id = ?"
+    app.get("/api/appuntamenti", (req, res) => {
+        var sql = "select * from appuntamenti"
         var params = [req.params.id]
         connpool.query(sql, params, (err, rows) => {
             if (err) {
@@ -74,7 +74,7 @@ function endpoint(app, connpool) {
     });
 
 
-    app.put("/api/tasks/:id", (req, res) => {
+    app.put("/api/appuntamenti/:id", (req, res) => {
         var data = {
             description: req.body.description,
             status: req.body.status,
