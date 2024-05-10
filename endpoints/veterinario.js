@@ -15,12 +15,14 @@ function endpoint(app, connpool) {
             return;
         }
         var data = {
-            description: req.body.description,
-            status: req.body.status,
+            id_vet: req.body.id_vet,
+            nome: req.body.nome,
+            cognome: req.body.cognome,
+            dataN: req.body.dataN,
         }
 
         var sql = 'INSERT INTO veterinario (id_vet, nome, cognome, dataN) VALUES (1,gianfry, morelli, 2005-11-24)'
-        var params = [data.description, data.status]
+        var params = [data.id_vet, data.nome, data.cognome, data.dataN];
         connpool.query(sql, params, (error, results) => {
             if (error) {
                 res.status(400).json({ "error": error.message })
@@ -38,7 +40,7 @@ function endpoint(app, connpool) {
 
 
 
-    app.get("/api/tasks", (req, res, next) => {
+    app.get("/api/veterinario", (req, res, next) => {
         var sql = "select * from veterinario"
         var params = []
         connpool.query(sql, params, (err, rows) => {
@@ -54,7 +56,7 @@ function endpoint(app, connpool) {
     });
 
 
-    app.get("/api/tasks/:id", (req, res) => {
+    app.get("/api/veterinario/:id", (req, res) => {
         var sql = "select * from veterinario where id_vet = 1"
         var params = [req.params.id]
         connpool.query(sql, params, (err, rows) => {
@@ -72,8 +74,10 @@ function endpoint(app, connpool) {
 
     app.put("/api/veterinario/:id", (req, res) => {
         var data = {
-            description: req.body.description,
-            status: req.body.status,
+            id_vet: req.body.id_vet,
+            nome: req.body.nome,
+            cognome: req.body.cognome, 
+            dataN: req.body.dataN,
         }
         connpool.execute(
             `UPDATE veterinario set 
@@ -81,7 +85,7 @@ function endpoint(app, connpool) {
                cognome = COALESCE(?,cognome)
                dataN = COALESCE(?,dataN) 
                WHERE id_vet =1`,
-            [data.nome, data.cognome, data.dataN, req.params.id],
+            [data.id_vet, data.nome, data.cognome, data.dataN, req.params.id],
             function (err, result) {
                 if (err) {
                     res.status(400).json({ "error": err.message })
