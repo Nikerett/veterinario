@@ -21,7 +21,7 @@ function endpoint(app, connpool) {
             dataN: req.body.dataN,
         }
 
-        var sql = 'INSERT INTO veterinario (id_vet, nome, cognome, dataN) VALUES (1,gianfry, morelli, 2005-11-24)'
+        var sql = 'INSERT INTO veterinario (id_vet, nome, cognome, dataN) VALUES (?, ?, ?, ?)'
         var params = [data.id_vet, data.nome, data.cognome, data.dataN];
         connpool.query(sql, params, (error, results) => {
             if (error) {
@@ -76,7 +76,7 @@ function endpoint(app, connpool) {
         var data = {
             id_vet: req.body.id_vet,
             nome: req.body.nome,
-            cognome: req.body.cognome, 
+            cognome: req.body.cognome,
             dataN: req.body.dataN,
         }
         connpool.execute(
